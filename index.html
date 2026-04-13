@@ -452,6 +452,57 @@ footer span { margin: 0 0.4rem; }
 @media (max-width: 500px) {
   .skills-grid { grid-template-columns: 1fr; }
 }
+
+
+.hamburger {
+  display: none;
+  flex-direction: column; justify-content: center; align-items: center;
+  gap: 5px; width: 34px; height: 34px;
+  background: transparent; border: 1px solid var(--card-border);
+  border-radius: 50%; cursor: pointer; flex-shrink: 0;
+}
+.hamburger span {
+  display: block; width: 14px; height: 1.5px;
+  background: var(--wisteria); border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+.mobile-menu {
+  display: none;
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 99;
+  background: var(--nav-bg);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  flex-direction: column; align-items: center; justify-content: center;
+  gap: 2.2rem;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.mobile-menu.open {
+  display: flex; opacity: 1; pointer-events: all;
+}
+.mobile-menu a {
+  text-decoration: none; font-size: 1.6rem;
+  font-family: 'Cormorant Garamond', serif; font-weight: 300;
+  color: var(--ink); letter-spacing: 0.08em;
+  transition: color 0.2s;
+}
+.mobile-menu a:hover { color: var(--wisteria); }
+.mobile-menu .menu-close-hint {
+  font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--wisteria); opacity: 0.5; margin-top: 1rem;
+}
+
+@media (max-width: 760px) {
+  nav { padding: 1rem 1.4rem; }
+  .nav-links a { display: none; }
+  .nav-social { display: none; }
+  .hamburger { display: flex; }
+  .audio-toggle { margin-left: auto; }
+}
 </style>
 </head>
 <body>
@@ -486,6 +537,11 @@ footer span { margin: 0 0.4rem; }
     <!-- AUDIO TOGGLE — top-right of nav -->
     <button class="audio-toggle" id="audioToggle" aria-label="Toggle sound">♪</button>
   </div>
+
+
+  <button class="hamburger" id="hamburger" aria-label="Open menu">
+  <span></span><span></span><span></span>
+  </button> 
 </nav>
 
 <!-- HERO -->
@@ -883,6 +939,16 @@ footer span { margin: 0 0.4rem; }
   </div>
 </section>
 
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" >About</a>
+  <a href="#education">Education</a>
+  <a href="#experience">Experience</a>
+  <a href="#projects">Projects</a>
+  <a href="#skills">Skills</a>
+  <a href="#contact">Contact</a>
+  <!-- <p class="menu-close-hint">tap anywhere to close</p> -->
+</div>
+
 <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
   <span class="toggle-icon">☾</span>
 </button>
@@ -1114,6 +1180,24 @@ themeBtn.addEventListener('click', () => {
   toggleIcon.textContent = isDim ? '☼' : '☾';
   localStorage.setItem('gina-theme', isDim ? 'dark' : 'light'); // save preference
   playTheme(isDim);
+});
+
+/* HAMBURGER MENU */
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('open');
+  mobileMenu.classList.toggle('open');
+  playClick();
+});
+
+// Close when a link is clicked
+mobileMenu.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    hamburger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+  });
 });
 </script>
 </body>
