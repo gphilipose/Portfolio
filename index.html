@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gina Philipose — CS & Data Science</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500&family=Pinyon+Script&family=Playfair+Display:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --wisteria:   #9b72cf;
+  --lavender:   #c5b3e6;
+  --blush:      #f0e8f8;
+  --petal:      #ede8f5;
+  --deep:       #5c3d9e;
+  --sage:       #a8c8a0;
+  --sage-deep:  #6da068;
+  --mist:       #f7f3fc;
+  --blue:       #00aeff;
+  --ink:        #28183f;
+  --glass:      rgba(255,252,255,0.52);
+  --shadow:     rgba(90,50,160,0.12);
+  --shadow-deep:rgba(60,20,120,0.22);
+  --nav-bg:     rgba(240,232,248,0.82);
+  --canvas-bg:  #ede8f5;
+  --card-border:rgba(180,140,220,0.3);
+}
+
+@keyframes pulseFlow {
+  0% { stroke-dashoffset: 1000; }
+  100% { stroke-dashoffset: 0; }
+}
+
+.circuit-overlay path {
+  stroke-dasharray: 1000;
+  animation: pulseFlow 20s linear infinite;
+}
+
+.circuit-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+body.dim {
+  --wisteria:   #b89fe0;
+  --lavender:   #8a6bbf;
+  --blush:      #231a38;
+  --petal:      #1a1228;
+  --deep:       #d4b8f0;
+  --sage:       #7aaa72;
+  --sage-deep:  #5a8a52;
+  --mist:       #1e1530;
+  --blue:       #7ec8e3;
+  --ink:        #ede0ff;
+  --glass:      rgba(35,26,56,0.60);
+  --shadow:     rgba(80,40,160,0.35);
+  --shadow-deep:rgba(40,10,100,0.5);
+  --nav-bg:     rgba(22,14,40,0.88);
+  --canvas-bg:  #1a1228;
+  --card-border:rgba(150,110,200,0.35);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  color: var(--ink);
+  background: var(--petal);
+  overflow-x: hidden;
+}
+
+#bg-canvas {
+  position: fixed; inset: 0; z-index: -2; pointer-events: none;
+}
+body::before {
+  content: "";
+  position: fixed; inset: 0; z-index: -1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none; opacity: 0.5;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background-image:
+    linear-gradient(rgba(155,114,207,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(155,114,207,0.08) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.2rem 3rem;
+  background: var(--nav-bg);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(180,140,220,0.22);
+}
+.nav-name {
+  font-family: 'Pinyon Script', cursive;
+  font-size: 2rem; color: var(--wisteria); letter-spacing: 0.02em;
+}
+.nav-links { display: flex; gap: 2.2rem; align-items: center; }
+.nav-links a {
+  text-decoration: none; font-size: 0.75rem;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--ink); opacity: 0.55;
+  transition: opacity 0.2s, color 0.2s; font-weight: 500;
+}
+.nav-links a:hover { opacity: 1; color: var(--wisteria); }
+.nav-social { display: flex; gap: 0.8rem; margin-left: 0.6rem; }
+.nav-social a {
+  width: 30px; height: 30px;
+  border: 1px solid var(--card-border); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  text-decoration: none; color: var(--wisteria); font-size: 0.78rem;
+  transition: background 0.2s, transform 0.2s; opacity: 0.8; font-weight: 600;
+}
+.nav-social a:hover { background: rgba(155,114,207,0.15); transform: scale(1.1); opacity: 1; }
+
+/* AUDIO TOGGLE */
+.audio-toggle {
+  width: 30px; height: 30px;
+  border: 1px solid var(--card-border); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: transparent; cursor: pointer;
+  color: var(--wisteria); font-size: 0.85rem;
+  transition: background 0.2s, transform 0.2s, opacity 0.3s;
+  opacity: 0.8; flex-shrink: 0; position: relative;
+  outline: none; font-family: inherit;
+}
+.audio-toggle:hover { background: rgba(155,114,207,0.15); transform: scale(1.1); opacity: 1; }
+/* Diagonal strikethrough when muted */
+.audio-toggle::after {
+  content: "";
+  position: absolute;
+  width: 2px; height: 145%;
+  background: var(--wisteria);
+  border-radius: 2px;
+  transform: rotate(45deg);
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+.audio-toggle.muted { opacity: 0.4; }
+.audio-toggle.muted::after { opacity: 1; }
+
+/* HERO */
+#hero {
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 6rem 2rem 4rem; position: relative;
+}
+.hero-eyebrow {
+  font-size: 0.7rem; letter-spacing: 0.38em; text-transform: uppercase;
+  color: var(--wisteria); margin-bottom: 1.8rem;
+  opacity: 0; animation: riseIn 1s 0.3s forwards ease;
+  display: flex; align-items: center; gap: 0.8rem;
+}
+.hero-eyebrow::before, .hero-eyebrow::after {
+  content: ""; display: inline-block; width: 28px; height: 1px;
+  background: var(--lavender); opacity: 0.7;
+}
+.hero-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(4.5rem, 11vw, 9rem);
+  font-weight: 300; line-height: 0.95; color: var(--ink);
+  opacity: 0; animation: riseIn 1s 0.5s forwards ease;
+}
+.hero-name em { font-style: italic; color: var(--wisteria); }
+.hero-tagline {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(0.95rem, 2vw, 1.2rem); font-style: italic;
+  color: var(--blue); margin-top: 1.4rem;
+  opacity: 0; animation: riseIn 1s 0.75s forwards ease; letter-spacing: 0.03em;
+}
+.hero-desc {
+  max-width: 500px; font-size: 0.9rem; line-height: 2;
+  color: var(--ink); opacity: 0; animation: riseIn 1s 1s forwards ease;
+  margin-top: 1.6rem; font-weight: 300;
+}
+.hero-cta {
+  margin-top: 2.8rem; display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+  opacity: 0; animation: riseIn 1s 1.15s forwards ease;
+}
+.btn-primary {
+  font-size: 0.73rem; letter-spacing: 0.18em; text-transform: uppercase;
+  font-weight: 500; text-decoration: none; padding: 0.75rem 1.9rem;
+  border-radius: 30px; background: var(--wisteria); color: white;
+  box-shadow: 0 4px 20px rgba(155,114,207,0.35);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(155,114,207,0.5); }
+.btn-outline {
+  font-size: 0.73rem; letter-spacing: 0.18em; text-transform: uppercase;
+  font-weight: 500; text-decoration: none; padding: 0.75rem 1.9rem;
+  border-radius: 30px; border: 1px solid var(--lavender); color: var(--wisteria);
+  transition: background 0.2s, transform 0.2s;
+}
+.btn-outline:hover { background: rgba(155,114,207,0.09); transform: translateY(-2px); }
+.hero-scroll {
+  margin-top: 3.5rem; display: flex; flex-direction: column;
+  align-items: center; gap: 0.5rem;
+  opacity: 0; animation: riseIn 1s 1.3s forwards ease;
+}
+.scroll-line {
+  width: 1px; height: 48px;
+  background: linear-gradient(to bottom, var(--wisteria), transparent);
+  animation: scrollPulse 2s infinite;
+}
+.scroll-label { font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--wisteria); opacity: 0.6; }
+@keyframes scrollPulse { 0%,100%{opacity:.4;transform:scaleY(1)}50%{opacity:1;transform:scaleY(1.12)} }
+
+/* FLOATING PETALS */
+.petal-float { position: fixed; pointer-events: none; opacity: 0; animation: petalDrift linear infinite; }
+@keyframes petalDrift {
+  0%   { transform: translateY(110vh) rotate(0deg) translateX(0); opacity: 0; }
+  10%  { opacity: 0.3; }
+  50%  { transform: translateY(50vh) rotate(180deg) translateX(14px); }
+  90%  { opacity: 0.2; }
+  100% { transform: translateY(-10vh) rotate(360deg) translateX(-8px); opacity: 0; }
+}
+
+/* SECTIONS */
+section { max-width: 1020px; margin: 0 auto; padding: 6rem 2rem; }
+.section-header { display: flex; align-items: baseline; gap: 1.4rem; margin-bottom: 3.5rem; }
+.section-label { font-size: 0.67rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--wisteria); font-weight: 500; white-space: nowrap; opacity: 0.7; }
+.section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.4rem,5vw,3.4rem); font-weight: 300; color: var(--ink); line-height: 1.1; }
+.section-deco { font-size: 1rem; color: var(--lavender); opacity: 0.65; margin-left: -0.4rem; }
+.section-line { flex: 1; height: 1px; background: linear-gradient(to right, var(--lavender), transparent); }
+
+/* GLASS CARD */
+.card {
+  background: var(--glass); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--card-border); border-radius: 28px; padding: 2rem 2.4rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 8px 40px var(--shadow), inset 0 1px 0 rgba(255,255,255,0.65);
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease;
+}
+.card.visible { opacity: 1; transform: translateY(0); }
+.card:hover { box-shadow: 0 20px 60px var(--shadow-deep), inset 0 1px 0 rgba(255,255,255,0.9); transform: translateY(-5px); }
+.card-tag { font-size: 0.63rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--wisteria); font-weight: 500; margin-bottom: 0.6rem; opacity: 0.8; }
+.card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.55rem; font-weight: 400; color: var(--ink); margin-bottom: 0.5rem; }
+.card p { font-size: 0.88rem; line-height: 1.85; color: var(--ink); opacity: 0.72; font-weight: 300; }
+.card-badge {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  background: rgba(155,114,207,0.11); border: 1px solid rgba(155,114,207,0.28);
+  color: var(--wisteria); padding: 0.28rem 0.9rem; border-radius: 20px;
+  font-size: 0.68rem; letter-spacing: 0.1em; margin-top: 1rem; font-weight: 500;
+}
+.card-badge::before { content: "✦"; font-size: 0.45rem; }
+
+.card {
+  position: relative;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 6px;
+  height: 6px;
+  background: var(--wisteria);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--wisteria);
+}
+
+.project-card:hover {
+  background: linear-gradient(
+    120deg,
+    rgba(155,114,207,0.15),
+    rgba(255,158,219,0.15)
+  );
+}
+
+/* ABOUT */
+#about .about-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 2.5rem; align-items: center; }
+.about-portrait { position: relative; display: flex; align-items: center; justify-content: center; }
+.portrait-frame { position: relative; width: 100%; max-width: 290px; margin: 0 auto; }
+.portrait-blob {
+  position: absolute; inset: -14px;
+  background: linear-gradient(135deg, var(--lavender), var(--sage), var(--blush));
+  border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+  animation: morphBlob 12s ease-in-out infinite;
+  opacity: 0.5; filter: blur(6px);
+}
+.portrait-img {
+  position: relative; width: 100%; aspect-ratio: 1;
+  border-radius: 55% 45% 50% 50% / 48% 52% 48% 52%;
+  object-fit: cover; object-position: center top;
+  animation: morphBlob 12s ease-in-out infinite;
+  box-shadow: 0 20px 60px var(--shadow-deep);
+  border: 3px solid rgba(200,170,240,0.45);
+  display: block;
+}
+.portrait-fallback {
+  display: none; width: 100%; aspect-ratio: 1;
+  align-items: center; justify-content: center;
+  position: relative; z-index: 1;
+  border-radius: 55% 45% 50% 50% / 48% 52% 48% 52%;
+  animation: morphBlob 12s ease-in-out infinite;
+  background: linear-gradient(135deg, var(--lavender), var(--blush), var(--sage));
+}
+.portrait-corner {
+  position: absolute; pointer-events: none; z-index: 2;
+}
+.portrait-corner.top-right { top: -16px; right: -16px; width: 80px; height: 80px; }
+.portrait-corner.bot-left  { bottom: -12px; left: -12px; width: 64px; height: 64px; transform: rotate(180deg); }
+@keyframes morphBlob {
+  0%,100%{border-radius:60% 40% 55% 45% / 50% 60% 40% 50%}
+  33%{border-radius:40% 60% 45% 55% / 60% 40% 55% 45%}
+  66%{border-radius:55% 45% 60% 40% / 45% 55% 50% 50%}
+}
+.about-text { display: flex; flex-direction: column; gap: 1.3rem; }
+.about-text p { font-size: 0.94rem; line-height: 2; font-weight: 300; opacity: 0.83; }
+.about-text .highlight { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-style: italic; color: var(--wisteria); font-weight: 400; line-height: 1.55; opacity: 1; }
+.about-links { display: flex; gap: 0.9rem; margin-top: 0.4rem; flex-wrap: wrap; }
+.about-link {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  font-size: 0.74rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--wisteria); text-decoration: none; font-weight: 500;
+  border-bottom: 1px solid var(--lavender); padding-bottom: 2px;
+  transition: color 0.2s, border-color 0.2s;
+}
+.about-link:hover { color: var(--deep); border-color: var(--deep); }
+
+/* EDUCATION */
+.edu-card { display: grid; grid-template-columns: auto 1fr; gap: 1.6rem; align-items: start; }
+.edu-icon {
+  width: 54px; height: 54px;
+  background: linear-gradient(135deg, var(--lavender), var(--blush));
+  border-radius: 18px; display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; box-shadow: 0 4px 18px var(--shadow); flex-shrink: 0;
+}
+.edu-meta { font-size: 0.78rem; color: var(--wisteria); opacity: 0.7; margin-top: 0.3rem; }
+.edu-degrees { margin-top: 0.5rem; }
+.edu-degree { display: flex; align-items: center; gap: 0.6rem; font-size: 0.86rem; font-weight: 300; opacity: 0.75; margin-top: 0.5rem; }
+.edu-degree::before { content: "❀"; font-size: 0.6rem; color: var(--wisteria); }
+
+/* EXPERIENCE */
+.exp-timeline { position: relative; padding-left: 2.2rem; }
+.exp-timeline::before {
+  content: ""; position: absolute; left: 0; top: 8px; bottom: 8px; width: 1px;
+  background: linear-gradient(to bottom, var(--lavender), var(--sage), transparent);
+}
+.exp-item { position: relative; margin-bottom: 2rem; opacity: 0; transform: translateX(-12px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.exp-item.visible { opacity: 1; transform: translateX(0); }
+.exp-item::before { content: "✿"; position: absolute; left: -2.7rem; top: 4px; color: var(--wisteria); font-size: 0.85rem; }
+.exp-item .card { margin-bottom: 0; opacity: 1; transform: none; }
+.exp-item .card:hover { transform: translateY(-4px); }
+
+/* PROJECTS */
+.projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.project-card {
+  background: var(--glass); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--card-border); border-radius: 24px; padding: 1.9rem;
+  box-shadow: 0 8px 32px var(--shadow), inset 0 1px 0 rgba(255,255,255,0.6);
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease;
+  position: relative; overflow: hidden;
+}
+.project-card::before { content: ""; position: absolute; top:-50px; right:-50px; width:140px; height:140px; background: radial-gradient(circle, var(--lavender) 0%, transparent 70%); opacity:0.28; }
+.project-card::after  { content: ""; position: absolute; bottom:-30px; left:-30px; width:100px; height:100px; background: radial-gradient(circle, var(--sage) 0%, transparent 70%); opacity:0.2; }
+.project-card.visible { opacity: 1; transform: translateY(0); }
+.project-card:hover { transform: translateY(-7px); box-shadow: 0 24px 60px var(--shadow-deep); }
+.project-emoji { font-size: 2rem; margin-bottom: 1rem; }
+.project-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 400; margin-bottom: 0.5rem; }
+.project-card p { font-size: 0.83rem; line-height: 1.8; font-weight: 300; opacity: 0.72; }
+.project-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 1.1rem; gap: 0.5rem; }
+.project-tech { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.tech-pill { background: rgba(155,114,207,0.11); border: 1px solid rgba(155,114,207,0.25); color: var(--wisteria); padding: 0.2rem 0.65rem; border-radius: 20px; font-size: 0.66rem; letter-spacing: 0.07em; font-weight: 500; }
+.project-link { font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--wisteria); text-decoration: none; white-space: nowrap; border-bottom: 1px solid var(--lavender); padding-bottom: 1px; transition: color 0.2s; opacity: 0.8; flex-shrink: 0; }
+.project-link:hover { color: var(--deep); opacity: 1; }
+.project-links { display: flex; gap: 0.8rem; flex-shrink: 0; }
+
+/* SKILLS */
+.skills-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; }
+.skill-group {
+  background: var(--glass); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--card-border); border-radius: 22px; padding: 1.6rem;
+  box-shadow: 0 6px 24px var(--shadow);
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.skill-group.visible { opacity: 1; transform: translateY(0); }
+.skill-group:hover { transform: translateY(-3px); }
+.skill-group-label { font-size: 0.63rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--wisteria); margin-bottom: 1.1rem; font-weight: 500; display: flex; align-items: center; gap: 0.4rem; }
+.skill-group-label::before { content: "✦"; font-size: 0.5rem; }
+.skill-item { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.65rem; font-size: 0.86rem; font-weight: 300; }
+.skill-dot { width: 5px; height: 5px; background: var(--lavender); border-radius: 50%; flex-shrink: 0; }
+
+/* CONTACT */
+#contact { text-align: center; padding: 5rem 2rem 8rem; }
+.contact-inner { max-width: 620px; margin: 0 auto; }
+.contact-deco { font-size: 2.8rem; margin-bottom: 1rem; line-height: 1; filter: drop-shadow(0 4px 12px rgba(155,114,207,0.3)); }
+.contact-quote { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.7rem,4vw,2.5rem); font-style: italic; font-weight: 300; color: var(--ink); line-height: 1.4; margin-bottom: 1.2rem; }
+.contact-quote span { color: var(--wisteria); }
+.contact-sub { font-size: 0.88rem; font-weight: 300; opacity: 0.65; margin-bottom: 2.4rem; line-height: 1.9; }
+.contact-links { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+.contact-email { display: inline-block; font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--wisteria); text-decoration: none; letter-spacing: 0.08em; border-bottom: 1px solid var(--lavender); padding-bottom: 3px; transition: color 0.2s, border-color 0.2s; }
+.contact-email:hover { color: var(--deep); border-color: var(--deep); }
+.contact-social { display: flex; gap: 1rem; margin-top: 0.4rem; }
+.contact-social a { width: 42px; height: 42px; border: 1px solid var(--card-border); border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; color: var(--wisteria); font-size: 0.85rem; font-weight: 600; transition: background 0.2s, transform 0.2s, box-shadow 0.2s; }
+.contact-social a:hover { background: rgba(155,114,207,0.15); transform: translateY(-3px); box-shadow: 0 6px 16px var(--shadow); }
+
+/* THEME TOGGLE */
+.theme-toggle {
+  position: fixed; bottom: 1.6rem; right: 1.6rem; z-index: 200;
+  background: var(--glass); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(155,114,207,0.35); border-radius: 30px;
+  padding: 0.5rem 1.1rem; display: flex; align-items: center; gap: 0.5rem;
+  cursor: pointer; font-family: 'DM Sans', sans-serif;
+  font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--wisteria); font-weight: 500;
+  transition: background 0.3s, box-shadow 0.3s; box-shadow: 0 4px 20px var(--shadow);
+}
+.theme-toggle:hover { background: rgba(155,114,207,0.15); box-shadow: 0 6px 28px var(--shadow-deep); }
+.toggle-icon { font-size: 1rem; transition: transform 0.4s ease; }
+.theme-toggle:hover .toggle-icon { transform: rotate(20deg); }
+
+/* FOOTER */
+footer { text-align: center; padding: 2rem; border-top: 1px solid rgba(180,140,220,0.18); font-size: 0.72rem; letter-spacing: 0.15em; color: var(--wisteria); opacity: 0.6; }
+footer span { margin: 0 0.4rem; }
+
+/* ANIMATIONS */
+@keyframes riseIn { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+
+/* SPARKLE */
+.sparkle-trail { position: fixed; pointer-events: none; font-size: 11px; z-index: 9997; animation: sparkleFade 0.9s forwards ease; }
+@keyframes sparkleFade { 0%{opacity:1;transform:translateY(0) scale(1)} 100%{opacity:0;transform:translateY(-18px) scale(0.4)} }
+
+/* RESPONSIVE */
+@media (max-width: 760px) {
+  nav { padding: 1rem 1.4rem; }
+  .nav-links { gap: 1rem; }
+  .nav-social { display: none; }
+  #about .about-grid { grid-template-columns: 1fr; }
+  .portrait-frame { max-width: 220px; }
+  .projects-grid { grid-template-columns: 1fr; }
+  .skills-grid { grid-template-columns: 1fr 1fr; }
+  .hero-cta { flex-direction: column; align-items: center; }
+}
+@media (max-width: 500px) {
+  .skills-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<svg class="circuit-overlay" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+  <path d="M0 200 H300 V400 H600 V700 H1000"
+        stroke="url(#grad)" stroke-width="2" fill="none" opacity="0.25"/>
+  <path d="M1000 300 H700 V500 H400 V800 H0"
+        stroke="url(#grad)" stroke-width="2" fill="none" opacity="0.2"/>
+  <defs>
+    <linearGradient id="grad">
+      <stop offset="0%" stop-color="#ff9edb"/>
+      <stop offset="100%" stop-color="#9b72cf"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<nav>
+  <span class="nav-name">Gina Philipose</span>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#education">Education</a>
+    <a href="#experience">Experience</a>
+    <a href="#projects">Projects</a>
+    <a href="#skills">Skills</a>
+    <a href="#contact">Contact</a>
+    <div class="nav-social">
+      <!-- <a href="https://github.com/gphilipose" target="_blank" title="GitHub">gh</a>
+      <a href="https://www.linkedin.com/in/g-p-p/" target="_blank" title="LinkedIn">in</a> -->
+    </div>
+    <!-- AUDIO TOGGLE — top-right of nav -->
+    <button class="audio-toggle" id="audioToggle" aria-label="Toggle sound">♪</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <p class="hero-eyebrow">Portfolio</p>
+  <h1 class="hero-name">Gina<br><em>Philipose</em></h1>
+  <!-- <p class="hero-tagline">Computer Engineer &amp; Data Scientist</p> -->
+   <p class="hero-tagline">Computer Engineer</p>
+  <p class="hero-desc">
+    Building intelligent systems at the intersection of hardware, software, and human curiosity - where precision meets wonder.
+  </p>
+  <div class="hero-cta">
+    <a href="#projects" class="btn-primary">View My Work</a>
+    <a href="#contact" class="btn-outline">Get in Touch</a>
+  </div>
+  <!-- <div class="hero-scroll">
+    <span class="scroll-label">Scroll</span>
+    <div class="scroll-line"></div>
+  </div> -->
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header">
+    <span class="section-label">01</span>
+    <h2 class="section-title">About</h2>
+    <span class="section-deco">✿</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="about-grid">
+    <div class="about-portrait card">
+      <div class="portrait-frame">
+        <div class="portrait-blob"></div>
+        <img src="profilepic.jpg" alt="Gina Philipose" class="portrait-img"
+             onerror="this.style.display='none'; document.getElementById('portrait-fallback').style.display='flex';">
+        <div id="portrait-fallback" class="portrait-fallback">
+          <svg viewBox="0 0 160 200" xmlns="http://www.w3.org/2000/svg" style="width:72%;max-width:180px;">
+            <path d="M80 195 Q78 160 75 130 Q72 100 78 70 Q82 45 80 20" stroke="#9b72cf" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path d="M78 120 Q55 110 40 115" stroke="#9b72cf" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+            <path d="M76 95 Q100 85 118 90" stroke="#9b72cf" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+            <ellipse cx="32" cy="112" rx="10" ry="5" fill="#a8c8a0" opacity="0.85" transform="rotate(-20,32,112)"/>
+            <ellipse cx="122" cy="87" rx="10" ry="5" fill="#a8c8a0" opacity="0.85" transform="rotate(15,122,87)"/>
+            <g opacity="0.92">
+              <ellipse cx="40" cy="125" rx="5" ry="7" fill="#c5b3e6"/>
+              <ellipse cx="36" cy="136" rx="4.5" ry="6.5" fill="#b49dd4"/>
+              <ellipse cx="42" cy="137" rx="4.5" ry="6.5" fill="#c5b3e6"/>
+              <ellipse cx="38" cy="148" rx="4" ry="6" fill="#a88bc9"/>
+              <ellipse cx="44" cy="148" rx="4" ry="6" fill="#b49dd4"/>
+              <ellipse cx="40" cy="158" rx="3.5" ry="5" fill="#c5b3e6"/>
+              <ellipse cx="40" cy="167" rx="2.5" ry="4" fill="#b49dd4" opacity="0.7"/>
+            </g>
+            <g opacity="0.92">
+              <ellipse cx="118" cy="98" rx="5" ry="7" fill="#c5b3e6"/>
+              <ellipse cx="116" cy="120" rx="4" ry="6" fill="#a88bc9"/>
+              <ellipse cx="118" cy="131" rx="3.5" ry="5" fill="#c5b3e6"/>
+              <ellipse cx="118" cy="140" rx="2.5" ry="4" fill="#b49dd4" opacity="0.7"/>
+            </g>
+            <g opacity="0.85">
+              <ellipse cx="80" cy="28" rx="4" ry="5.5" fill="#c5b3e6"/>
+              <ellipse cx="75" cy="37" rx="3.5" ry="5" fill="#b49dd4"/>
+              <ellipse cx="84" cy="37" rx="3.5" ry="5" fill="#c5b3e6"/>
+              <ellipse cx="80" cy="54" rx="2.5" ry="3.5" fill="#c5b3e6" opacity="0.7"/>
+            </g>
+          </svg>
+        </div>
+        <svg class="portrait-corner top-right" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="55" cy="18" r="8" fill="#c5b3e6" opacity="0.65"/>
+          <circle cx="55" cy="18" r="3.5" fill="#9b72cf" opacity="0.85"/>
+          <circle cx="70" cy="34" r="5.5" fill="#a8c8a0" opacity="0.6"/>
+          <circle cx="70" cy="34" r="2.5" fill="#6da068" opacity="0.8"/>
+          <circle cx="42" cy="38" r="4" fill="#c5b3e6" opacity="0.4"/>
+          <line x1="48" y1="14" x2="62" y2="22" stroke="#9b72cf" stroke-width="1" opacity="0.35"/>
+          <line x1="64" y1="26" x2="72" y2="38" stroke="#9b72cf" stroke-width="1" opacity="0.35"/>
+        </svg>
+        <svg class="portrait-corner bot-left" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="32" cy="48" r="7" fill="#c5b3e6" opacity="0.6"/>
+          <circle cx="32" cy="48" r="3" fill="#9b72cf" opacity="0.85"/>
+          <circle cx="16" cy="36" r="4.5" fill="#a8c8a0" opacity="0.55"/>
+          <circle cx="46" cy="40" r="3.5" fill="#c5b3e6" opacity="0.4"/>
+        </svg>
+      </div>
+    </div>
+    <div class="about-text card">
+      <p class="highlight">"Somewhere between elegant code and the poetry of machines."</p>
+      <p>I'm Gina - a Computer Engineer and aspiring Data Scientist based in Seattle. I love building things that feel alive: from embedded sensors that listen to the earth, to ML models that see patterns in cities.</p>
+      <p>Currently pursuing dual degrees at Seattle University, I live at the intersection of precision and wonder - where a clean algorithm can be just as beautiful as a poem.</p>
+      <div class="about-links">
+        <a href="https://github.com/gphilipose" target="_blank" class="about-link">✦ GitHub</a>
+        <a href="https://www.linkedin.com/in/g-p-p/" target="_blank" class="about-link">✦ LinkedIn</a>
+        <!-- <a href="#" class="about-link">✦ Resume</a> -->
+        <a href="GinaPhiliposeResume.pdf" class="about-link" download>✦ Resume</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="section-header">
+    <span class="section-label">02</span>
+    <h2 class="section-title">Education</h2>
+    <span class="section-deco">❀</span>
+    <div class="section-line"></div>
+  </div>
+
+  <!-- Seattle University -->
+  <div class="card">
+    <div class="edu-card">
+      <div class="edu-icon"><h2>🕮</h2></div>
+      <div>
+        <div class="card-tag">Seattle, WA</div>
+        <h3>Seattle University</h3>
+        <div class="edu-meta">Accelerated BS/MS Program · GPA: 4.0</div>
+        <div class="edu-degrees">
+          <div class="edu-degree">M.S. Computer Science - Data Science &nbsp;·&nbsp; Mar 2025 - Mar 2027 (Projected)</div>
+          <div class="edu-degree">B.S. Computer Engineering &amp; Computer Science (Dual-Major) &nbsp;·&nbsp; Sep 2023 - Dec 2026 (Projected)</div>
+          <div class="edu-degree">Minor in Electrical Engineering</div>
+        </div>
+        <span class="card-badge">Dual Degree Program</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Highline College -->
+  <div class="card">
+    <div class="edu-card">
+      <div class="edu-icon"><h1>✍︎</h1></div>
+      <div>
+        <div class="card-tag">Des Moines, WA</div>
+        <h3>Highline College</h3>
+        <div class="edu-meta">Running Start · Sep 2021 - Jun 2023 · GPA: 3.9</div>
+        <div class="edu-degrees">
+          <div class="edu-degree">Undeclared / Running Start Program</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decatur High School -->
+  <div class="card">
+    <div class="edu-card">
+      <div class="edu-icon"><h2>✎</h2></div>
+      <div>
+        <div class="card-tag">Federal Way, WA</div>
+        <h3>Decatur High School</h3>
+        <div class="edu-meta">Sep 2019 - Jun 2023 · GPA: 3.9</div>
+        <div class="edu-degrees">
+          <div class="edu-degree">High School Diploma</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE / RESEARCH -->
+<section id="experience">
+  <div class="section-header">
+    <span class="section-label">03</span>
+    <h2 class="section-title">Experience &amp; Research</h2>
+    <span class="section-deco">✿</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="exp-timeline">
+
+    <!-- ECE Research -->
+    <div class="exp-item">
+      <div class="card">
+        <div class="card-tag">ECE Research Assistant · Seattle University · Sept 2025 - Jun 2026 (Projected)</div>
+        <h3>Embedded Soil Moisture Sensor</h3>
+        <p>Collaborating within a 5-student interdisciplinary team (3 Computer Science, 2 Computer Engineering) and 2 professors to develop an ML model for spatial soil moisture estimation in areas without physical sensor coverage. Building 2-inch embedded ground sensors to collect validation data for supervised model training and calibration. Developing a dashboard to display packets from deployed sensors and visualize 1,000+ data points via a graph.</p>
+        <span class="card-badge">ML · Embedded Systems · Dashboard</span>
+      </div>
+    </div>
+
+    <!-- CS Research -->
+    <div class="exp-item">
+      <div class="card">
+        <div class="card-tag">CS Research Assistant · Seattle University · Jun 2024 - Aug 2024</div>
+        <h3>Computational Biology Education Simulations</h3>
+        <p>Collaborated in a 5-student interdisciplinary team (3 CS and 2 biology) and 2 professors to develop web-based biology simulations for classroom instruction using Python, JavaScript, HTML, and CSS. Managed source control and collaborative workflows using GitHub and VSCode.</p>
+        <div style="margin-top:0.8rem; display:flex; gap:1rem; flex-wrap:wrap;">
+          <a href="https://bio-sims.github.io" target="_blank" class="project-link">↗ Website</a>
+          <a href="https://github.com/bio-sims" target="_blank" class="project-link">↗ GitHub</a>
+        </div>
+        <span class="card-badge">Full-Stack · Biology · Simulation</span>
+      </div>
+    </div>
+
+    <!-- IT Intern -->
+    <div class="exp-item">
+      <div class="card">
+        <div class="card-tag">IT Intern · Federal Way Public Schools · Oct 2021 - Aug 2023</div>
+        <h3>IT Intern - Federal Way Public Schools</h3>
+        <p>Performed hardware repairs and software maintenance at and for various schools within the district. Trained and managed other interns, delegating tasks and ensuring efficient operations. Provided technical support for staff and students via phone and in-person troubleshooting.</p>
+        <span class="card-badge">Hardware · IT Support · Team Lead</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header">
+    <span class="section-label">04</span>
+    <h2 class="section-title">Projects</h2>
+    <span class="section-deco">✦</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="projects-grid">
+
+    <!-- NASA Rover -->
+    <div class="project-card">
+      <div class="project-emoji">✩₊˚.⋆☾⋆⁺₊✧</div>
+      <h3>NASA Psyche Mission Rover</h3>
+      <p>Capstone project: working in a 4-member multidisciplinary team (1 Computer, 1 Electrical, 2 Mechanical) to design and build a terrain-traversing rover using ML-based path optimization. Uses Arduino for real-time signal processing with RPLiDAR integration and NVIDIA Jetson Nano for onboard computation.</p>
+      <div class="project-footer">
+        <div class="project-tech">
+          <span class="tech-pill">Python</span><span class="tech-pill">Arduino C</span>
+          <span class="tech-pill">LiDAR</span><span class="tech-pill">Jetson Nano</span><span class="tech-pill">ML</span>
+        </div>
+        <!-- <a href="https://github.com/gphilipose" target="_blank" class="project-link">↗ GitHub</a> -->
+      </div>
+    </div>
+
+    <!-- Seattle Crime -->
+    <div class="project-card">
+      <div class="project-emoji">⌕ ⋆.˚˚ ༘ ⌕⋆｡˚</div>
+      <h3>Seattle Crime Spatial Prediction</h3>
+      <p>Analyzed historical Seattle Police Department crime data to investigate correlations between crime type, time, and location. Trained Random Forest, Naïve Bayes, and KNN models on 1,000,000+ records to predict neighborhood locations from partial crime reports. Insights aimed at supporting faster emergency response.</p>
+      <div class="project-footer">
+        <div class="project-tech">
+          <span class="tech-pill">Python</span><span class="tech-pill">Scikit-learn</span>
+          <span class="tech-pill">Pandas</span><span class="tech-pill">Matplotlib</span><span class="tech-pill">Seaborn</span>
+        </div>
+        <a href="https://github.com/gphilipose/Seattle-Crime-on-the-Dime" target="_blank" class="project-link">↗ GitHub</a>
+      </div>
+    </div>
+
+    <!-- QKD -->
+    <div class="project-card">
+      <div class="project-emoji">⚛︎₊˚ ⊹ ⚛︎ ˚⊹₊</div>
+      <h3>QKD Simulation</h3>
+      <p>Developed a simulation demonstrating the BB84 quantum key distribution protocol. Visualized quantum state preparation, measurement, basis reconciliation, and key agreement processes. Illustrated the effects of eavesdropping on key agreement using protocol-level behavior.</p>
+      <div class="project-footer">
+        <div class="project-tech">
+          <span class="tech-pill">HTML</span><span class="tech-pill">CSS</span>
+          <span class="tech-pill">JavaScript</span><span class="tech-pill">Cryptography</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/gphilipose/Quantum-Key-Distribution-Visual-Simulations" target="_blank" class="project-link">↗ GitHub</a>
+          <a href="https://gphilipose.github.io/Quantum-Key-Distribution-Visual-Simulations/" target="_blank" class="project-link">↗ Live</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUHelp -->
+    <div class="project-card">
+      <div class="project-emoji">𓊆:̲̅:̲̅:̲̅[̲̅:♡:]̲̅:̲̅:̲̅:̲̅𓊇</div>
+      <h3>SUHelp</h3>
+      <p>Developed a website condensing and organizing Seattle University resources for disabilities, abuse, finances, and general health to provide students with fast access and ease of use. Utilized a database to create a review system where students could leave comments and experiences with specific resources.</p>
+      <div class="project-footer">
+        <div class="project-tech">
+          <span class="tech-pill">HTML</span><span class="tech-pill">PHP</span>
+          <span class="tech-pill">JavaScript</span><span class="tech-pill">SQL</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/gphilipose/SUHelp" target="_blank" class="project-link">↗ GitHub</a>
+          <a href="https://gphilipose.github.io/SUHelp/" target="_blank" class="project-link">↗ Live</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chord Transposer -->
+    <div class="project-card">
+      <div class="project-emoji">‧₊˚♪ 𝄞₊˚⊹</div>
+      <h3>Chord Transposer</h3>
+      <p>Developed a web-based application to transpose song chords into any key - a handy tool for musicians and songwriters.</p>
+      <div class="project-footer">
+        <div class="project-tech">
+          <span class="tech-pill">HTML</span><span class="tech-pill">CSS</span>
+          <span class="tech-pill">JavaScript</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/gphilipose/chords" target="_blank" class="project-link">↗ GitHub</a>
+          <a href="https://gphilipose.github.io/chords/" target="_blank" class="project-link">↗ Live</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Simulations & Algorithms -->
+    <div class="project-card">
+      <!-- <div class="project-emoji">⚙️</div> -->
+       <div class="project-emoji">𖤉 ⚙ 🌣 𖤉</div>
+      <h3>Simulations &amp; Algorithms</h3>
+      <p>Built C++ simulations with error handling, priority queues, heaps, recursion, and tree balancing. Implemented sorting algorithms (Bubble, Merge, Heap, Quick) and graph traversal (BST, DFS). Created a COVID-19 Data Tracker using a hash table to process over 2M WHO data entries.</p>
+      <div class="project-footer">
+        <div class="project-tech">
+          <span class="tech-pill">C++</span><span class="tech-pill">Algorithms</span>
+          <span class="tech-pill">Data Structures</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-header">
+    <span class="section-label">05</span>
+    <h2 class="section-title">Skills</h2>
+    <span class="section-deco">❀</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-group">
+      <div class="skill-group-label">Languages</div>
+      <div class="skill-item"><span class="skill-dot"></span>Python</div>
+      <div class="skill-item"><span class="skill-dot"></span>C++</div>
+      <div class="skill-item"><span class="skill-dot"></span>Java</div>
+      <div class="skill-item"><span class="skill-dot"></span>C#</div>
+      <div class="skill-item"><span class="skill-dot"></span>JavaScript</div>
+      <div class="skill-item"><span class="skill-dot"></span>VHDL / Verilog</div>
+      <div class="skill-item"><span class="skill-dot"></span>SQL</div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-label">ML / Data Science</div>
+      <div class="skill-item"><span class="skill-dot"></span>TensorFlow</div>
+      <div class="skill-item"><span class="skill-dot"></span>PyTorch</div>
+      <div class="skill-item"><span class="skill-dot"></span>Scikit-learn</div>
+      <div class="skill-item"><span class="skill-dot"></span>Pandas / NumPy</div>
+      <div class="skill-item"><span class="skill-dot"></span>SciPy</div>
+      <div class="skill-item"><span class="skill-dot"></span>Matplotlib / Seaborn</div>
+      <div class="skill-item"><span class="skill-dot"></span>CNNs · RNNs · LSTMs</div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-label">Hardware &amp; Systems</div>
+      <div class="skill-item"><span class="skill-dot"></span>Arduino</div>
+      <div class="skill-item"><span class="skill-dot"></span>Raspberry Pi</div>
+      <div class="skill-item"><span class="skill-dot"></span>Jetson Nano</div>
+      <div class="skill-item"><span class="skill-dot"></span>ESP32</div>
+      <div class="skill-item"><span class="skill-dot"></span>DE1-SoC Board</div>
+      <div class="skill-item"><span class="skill-dot"></span>Linux / POSIX Threads</div>
+      <div class="skill-item"><span class="skill-dot"></span>TCP/IP</div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-label">Tools</div>
+      <div class="skill-item"><span class="skill-dot"></span>Git / GitHub</div>
+      <div class="skill-item"><span class="skill-dot"></span>Jupyter Notebook</div>
+      <div class="skill-item"><span class="skill-dot"></span>VS Code / PyCharm</div>
+      <div class="skill-item"><span class="skill-dot"></span>KiCAD / LTSpice</div>
+      <div class="skill-item"><span class="skill-dot"></span>QuestaSim / Quartus</div>
+      <div class="skill-item"><span class="skill-dot"></span>WinSCP / PuTTY</div>
+      <div class="skill-item"><span class="skill-dot"></span>HTML · CSS · PHP</div>
+    </div>
+  </div>
+
+  <!-- Extracurriculars -->
+  <div class="card" style="margin-top: 2rem;">
+    <div class="card-tag">Extracurricular &amp; Interests</div>
+    <h3>Clubs &amp; Organizations</h3>
+    <p>Member of the Society of Women Engineers (SWE), PCB (Printed Circuit Board) Club, Girls Who Code, IEEE, and IEEE-HKN.</p>
+    <p style="margin-top:0.6rem;">Interested in Data Communication Networks, AI, Machine Learning, Embedded Systems, and Cloud Computing.</p>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="section-header" style="justify-content:center; margin-bottom:1.5rem;">
+      <!-- <span class="section-label">06</span> -->
+      <h2 class="section-title">Say Hello</h2>
+    </div>
+    <div class="contact-deco">ദ്ദി◝ ⩊ ◜.ᐟ</div>
+    <p class="contact-quote">"Let's build something<br><span>beautiful together.</span>"</p>
+    <p class="contact-sub">
+      Open to research collaborations, internships, and interesting conversations.<br>
+      Currently based in Seattle / Federal Way, WA.<br>
+      . ₊˚ ☏ ₊˚✧  (206) 816-2072  . ₊˚ ☏ ₊˚✧
+    </p>
+    <div class="contact-links">
+      <a class="contact-email" href="mailto:ginaphilipose@gmail.com"><span class="__cf_email__">ginaphilipose@gmail.com</span></a>
+      <div class="contact-social">
+        <!-- <a href="https://github.com/gphilipose" target="_blank" title="GitHub"><img src="GitHub_Invertocat_White.svg" alt="GitHub Logo" width="40" height="200"></a>
+        <a href="https://www.linkedin.com/in/g-p-p/" target="_blank" title="LinkedIn"><img src="InBug-White.png" alt="LinkedIn Logo" width="90" height="40"></a>
+        <a href="#" title="Resume">CV</a> -->
+        <a href="https://github.com/gphilipose" target="_blank" title="GitHub">GitHub</a>
+        <a href="https://www.linkedin.com/in/g-p-p/" target="_blank" title="LinkedIn">LinkedIn</a>
+        <a href="GinaPhiliposeResume.pdf" title="Resume" download>Resume</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+  <span class="toggle-icon">☾</span>
+</button>
+
+<footer>
+  <span>✦</span> Gina Philipose <span>✦</span> Federal Way / Seattle, WA <span>✦</span>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+
+/* =============================================
+   AUDIO SYSTEM
+   ============================================= */
+const AC = new (window.AudioContext || window.webkitAudioContext)();
+
+// Unlock AudioContext on first user gesture
+document.addEventListener('click', () => {
+  if (AC.state === 'suspended') AC.resume();
+}, { once: true });
+
+// Load saved preference — default ON
+let audioEnabled = localStorage.getItem('gina-audio') !== 'false';
+
+// Core chime — silently respects audioEnabled flag
+function chime(freq, type = 'sine', dur = 0.35, vol = 0.12, delay = 0) {
+  if (!audioEnabled) return;
+  if (AC.state === 'suspended') AC.resume();
+  const osc  = AC.createOscillator();
+  const gain = AC.createGain();
+  osc.connect(gain);
+  gain.connect(AC.destination);
+  osc.type = type;
+  osc.frequency.setValueAtTime(freq, AC.currentTime + delay);
+  gain.gain.setValueAtTime(0, AC.currentTime + delay);
+  gain.gain.linearRampToValueAtTime(vol, AC.currentTime + delay + 0.01);
+  gain.gain.exponentialRampToValueAtTime(0.0001, AC.currentTime + delay + dur);
+  osc.start(AC.currentTime + delay);
+  osc.stop(AC.currentTime + delay + dur + 0.05);
+}
+
+/* --- Sound functions --- */
+function playPageLoad() {
+  const notes = [523, 659, 784, 1047]; // C5 E5 G5 C6
+  notes.forEach((f, i) => chime(f, 'sine', 0.6, 0.10, i * 0.11));
+}
+function playHover() {
+  chime(1200, 'sine', 0.18, 0.06);
+}
+function playClick() {
+  chime(880, 'triangle', 0.25, 0.13);
+  chime(1320, 'sine', 0.20, 0.07, 0.05);
+}
+function playReveal() {
+  chime(740,  'sine', 0.4, 0.07);
+  chime(987,  'sine', 0.4, 0.06, 0.06);
+  chime(1175, 'sine', 0.4, 0.05, 0.12);
+}
+function playTheme(goingDark) {
+  const notes = goingDark ? [1047, 784, 523] : [523, 784, 1047];
+  notes.forEach((f, i) => chime(f, 'sine', 0.5, 0.09, i * 0.09));
+}
+
+/* =============================================
+   AUDIO TOGGLE BUTTON
+   ============================================= */
+const audioBtn = document.getElementById('audioToggle');
+
+function updateAudioBtn() {
+  if (audioEnabled) {
+    audioBtn.classList.remove('muted');
+    audioBtn.setAttribute('title', 'Sound on — click to mute');
+    audioBtn.setAttribute('aria-label', 'Mute sound');
+  } else {
+    audioBtn.classList.add('muted');
+    audioBtn.setAttribute('title', 'Sound off — click to unmute');
+    audioBtn.setAttribute('aria-label', 'Unmute sound');
+  }
+}
+updateAudioBtn(); // Apply saved state on load
+
+audioBtn.addEventListener('click', () => {
+  audioEnabled = !audioEnabled;
+  localStorage.setItem('gina-audio', audioEnabled); // Persist to browser
+  updateAudioBtn();
+  // Play a short confirmation chime when turning back ON
+  if (audioEnabled) {
+    setTimeout(() => {
+      chime(784,  'sine', 0.4, 0.10);
+      chime(1047, 'sine', 0.4, 0.08, 0.1);
+    }, 30);
+  }
+});
+
+/* =============================================
+   WIRE UP SOUNDS
+   ============================================= */
+document.querySelectorAll('.nav-links a, .btn-primary, .btn-outline, .contact-social a, .contact-email, .theme-toggle, .about-link, .project-link')
+  .forEach(el => el.addEventListener('mouseenter', playHover));
+
+document.querySelectorAll('.nav-links a, .btn-primary, .btn-outline, .contact-social a, .contact-email, .about-link, .project-link')
+  .forEach(el => el.addEventListener('click', playClick));
+
+/* =============================================
+   PAGE LOAD CHIME
+   ============================================= */
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(playPageLoad, 400);
+});
+
+/* =============================================
+   SPARKLE TRAIL
+   ============================================= */
+let lastSpark = 0;
+document.addEventListener('mousemove', e => {
+  const now = Date.now();
+  if (now - lastSpark < 75) return;
+  lastSpark = now;
+  const emojis = ['✦','✧','·','⋆','✿','❀','˖','꩜'];
+  const s = document.createElement('div');
+  s.className = 'sparkle-trail';
+  s.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+  s.style.left = e.clientX + 'px';
+  s.style.top  = e.clientY + 'px';
+  s.style.color = `hsl(${240 + Math.random()*80}, 65%, 68%)`;
+  document.body.appendChild(s);
+  setTimeout(() => s.remove(), 900);
+});
+
+/* =============================================
+   BACKGROUND CANVAS
+   ============================================= */
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let W, H;
+function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+window.addEventListener('resize', resize);
+resize();
+
+const orbs = Array.from({length: 7}, (_, i) => ({
+  x: Math.random() * W, y: Math.random() * H,
+  r: 160 + Math.random() * 220,
+  vx: (Math.random() - 0.5) * 0.28,
+  vy: (Math.random() - 0.5) * 0.28,
+  hue: [270, 210, 145, 290, 185, 255, 310][i],
+  sat: 65 + Math.random() * 25,
+  baseLit: 83 + Math.random() * 12,
+  alpha: 0.16 + Math.random() * 0.14
+}));
+
+function drawBg() {
+  ctx.clearRect(0, 0, W, H);
+  const bgColor = getComputedStyle(document.body).getPropertyValue('--canvas-bg').trim();
+  ctx.fillStyle = bgColor || '#ede8f5';
+  ctx.fillRect(0, 0, W, H);
+  const dim = document.body.classList.contains('dim');
+  for (const o of orbs) {
+    o.x += o.vx; o.y += o.vy;
+    if (o.x < -o.r) o.x = W + o.r; if (o.x > W + o.r) o.x = -o.r;
+    if (o.y < -o.r) o.y = H + o.r; if (o.y > H + o.r) o.y = -o.r;
+    const lit   = dim ? o.baseLit * 0.26 : o.baseLit;
+    const alpha = dim ? o.alpha  * 1.7   : o.alpha;
+    const g = ctx.createRadialGradient(o.x, o.y, 0, o.x, o.y, o.r);
+    g.addColorStop(0, `hsla(${o.hue},${o.sat}%,${lit}%,${alpha})`);
+    g.addColorStop(1, 'transparent');
+    ctx.beginPath(); ctx.arc(o.x, o.y, o.r, 0, Math.PI * 2);
+    ctx.fillStyle = g; ctx.fill();
+  }
+  requestAnimationFrame(drawBg);
+}
+drawBg();
+
+/* =============================================
+   FLOATING PETALS
+   ============================================= */
+const petalEmojis = ['✧','✦','•','◦','⟡','⊹','⌁'];
+function spawnPetal() {
+  const p = document.createElement('div');
+  p.className = 'petal-float';
+  p.textContent = petalEmojis[Math.floor(Math.random() * petalEmojis.length)];
+  p.style.left = Math.random() * 100 + 'vw';
+  const dur = 16 + Math.random() * 12;
+  p.style.animationDuration = dur + 's';
+  p.style.animationDelay = Math.random() * -dur + 's';
+  p.style.fontSize = (0.65 + Math.random() * 0.7) + 'rem';
+  document.body.appendChild(p);
+  setTimeout(() => p.remove(), dur * 1000);
+}
+for (let i = 0; i < 10; i++) setTimeout(spawnPetal, i * 1000);
+setInterval(spawnPetal, 2200);
+
+/* =============================================
+   SCROLL REVEAL — with card reveal chime
+   ============================================= */
+const revealEls = document.querySelectorAll('.card, .project-card, .skill-group, .exp-item');
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => {
+        e.target.classList.add('visible');
+        if (i === 0) playReveal();
+      }, i * 80);
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+revealEls.forEach(el => obs.observe(el));
+
+/* =============================================
+   THEME TOGGLE
+   ============================================= */
+const themeBtn   = document.getElementById('themeToggle');
+const toggleIcon = themeBtn.querySelector('.toggle-icon');
+// let isDim = true;
+// document.body.classList.add('dim');
+// toggleIcon.textContent = '☼';
+// AFTER
+let isDim = localStorage.getItem('gina-theme') !== 'light';
+document.body.classList.toggle('dim', isDim);
+toggleIcon.textContent = isDim ? '☼' : '☾';
+// themeBtn.addEventListener('click', () => {
+//   isDim = !isDim;
+//   document.body.classList.toggle('dim', isDim);
+//   toggleIcon.textContent = isDim ? '☼' : '☾';
+//   playTheme(isDim);
+// });
+themeBtn.addEventListener('click', () => {
+  isDim = !isDim;
+  document.body.classList.toggle('dim', isDim);
+  toggleIcon.textContent = isDim ? '☼' : '☾';
+  localStorage.setItem('gina-theme', isDim ? 'dark' : 'light'); // save preference
+  playTheme(isDim);
+});
+</script>
+</body>
+</html>
