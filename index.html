@@ -503,6 +503,52 @@ footer span { margin: 0 0.4rem; }
   .hamburger { display: flex; }
   .audio-toggle { margin-left: auto; }
 }
+
+
+
+
+/* COURSE TOGGLE */
+.courses-toggle {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  margin-top: 1rem; font-size: 0.7rem; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--wisteria); font-weight: 500;
+  background: none; border: none; cursor: pointer; padding: 0;
+  font-family: 'DM Sans', sans-serif; opacity: 0.8;
+  transition: opacity 0.2s;
+}
+.courses-toggle:hover { opacity: 1; }
+.courses-toggle .toggle-arrow {
+  display: inline-block; font-size: 0.6rem;
+  transition: transform 0.3s ease;
+}
+.courses-toggle.open .toggle-arrow { transform: rotate(90deg); }
+
+.courses-list {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+  opacity: 0;
+}
+.courses-list.open { max-height: 900px; opacity: 1; }
+.courses-grid {
+  display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 1rem;
+}
+.course-pill {
+  background: rgba(155,114,207,0.09);
+  border: 1px solid rgba(155,114,207,0.22);
+  color: var(--wisteria); padding: 0.25rem 0.8rem;
+  border-radius: 20px; font-size: 0.7rem;
+  letter-spacing: 0.06em; font-weight: 400;
+}
+
+.course-category { width: 100%; margin-bottom: 0.9rem; }
+.course-category-label {
+  font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--wisteria); opacity: 0.55; font-weight: 500;
+  margin-bottom: 0.45rem;
+}
+.course-pills { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+
+.courses-grid { display: flex; flex-direction: column; margin-top: 1rem; }
 </style>
 </head>
 <body>
@@ -653,6 +699,65 @@ footer span { margin: 0 0.4rem; }
         </div>
         <span class="card-badge">Dual Degree Program</span>
         <span class="card-badge">In-Progress</span>
+
+        <button class="courses-toggle" onclick="toggleCourses(this)">
+          <span class="toggle-arrow">▶</span> Relevant Coursework
+        </button>
+        <div class="courses-list">
+          <div class="courses-grid">
+
+            <div class="course-category">
+              <div class="course-category-label">CS &amp; Software</div>
+              <div class="course-pills">
+                <span class="course-pill">Computing Systems</span>
+                <span class="course-pill">Data Structures</span>
+                <span class="course-pill">Ethics &amp; Professional Issues in Computing</span>
+                <span class="course-pill">Foundations of Computer Science</span>
+                <span class="course-pill">Fundamentals of Databases</span>
+                <span class="course-pill">Languages &amp; Computation</span>
+                <span class="course-pill">Object-Oriented Development</span>
+                <span class="course-pill">Security in Computing</span>
+              </div>
+            </div>
+
+            <div class="course-category">
+              <div class="course-category-label">ML &amp; Data Science</div>
+              <div class="course-pills">
+                <span class="course-pill">Artificial Intelligence</span>
+                <span class="course-pill">Introduction to Data Science</span>
+                <span class="course-pill">Large Language Models</span>
+                <span class="course-pill">Machine Learning I</span>
+              </div>
+            </div>
+
+            <div class="course-category">
+              <div class="course-category-label">Hardware &amp; Embedded</div>
+              <div class="course-pills">
+                <span class="course-pill">Digital Operations &amp; Computation</span>
+                <span class="course-pill">Embedded Systems</span>
+                <span class="course-pill">Lab I: Circuits</span>
+                <span class="course-pill">Lab II: Electronics</span>
+                <span class="course-pill">Lab III: Signals &amp; Systems</span>
+                <span class="course-pill">Microprocessor Design</span>
+                <span class="course-pill">Programmable Devices</span>
+                <span class="course-pill">Signals &amp; Systems</span>
+              </div>
+            </div>
+
+            <div class="course-category">
+              <div class="course-category-label">Math, Networks &amp; Theory</div>
+              <div class="course-pills">
+                <span class="course-pill">Data Communication Networks</span>
+                <span class="course-pill">Electrical Circuits I</span>
+                <span class="course-pill">Electrical Circuits II</span>
+                <span class="course-pill">Engineering Design I</span>
+                <span class="course-pill">Engineering Design II</span>
+                <span class="course-pill">Probability &amp; Statistics for Science &amp; Engineering</span>
+                <span class="course-pill">Semiconductor Devices &amp; Circuits</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -667,6 +772,53 @@ footer span { margin: 0 0.4rem; }
         <div class="edu-meta">Running Start · Sep 2021 - Jun 2023 · GPA: 3.9</div>
         <div class="edu-degrees">
           <div class="edu-degree">Undeclared / Running Start Program</div>
+        </div>
+
+        <button class="courses-toggle" onclick="toggleCourses(this)">
+          <span class="toggle-arrow">▶</span> Relevant Coursework
+        </button>
+        <div class="courses-list">
+          <div class="courses-grid">
+
+            <div class="course-category">
+              <div class="course-category-label">Mathematics</div>
+              <div class="course-pills">
+                <span class="course-pill">Calculus I</span>
+                <span class="course-pill">Calculus II</span>
+                <span class="course-pill">Calculus III</span>
+                <span class="course-pill">Calculus IV</span>
+                <span class="course-pill">Differential Equations</span>
+                <span class="course-pill">Introduction to Statistics</span>
+                <span class="course-pill">Linear Algebra</span>
+              </div>
+            </div>
+
+            <div class="course-category">
+              <div class="course-category-label">Physics</div>
+              <div class="course-pills">
+                <span class="course-pill">Electricity &amp; Magnetism</span>
+                <span class="course-pill">Mechanics</span>
+                <span class="course-pill">Waves</span>
+              </div>
+            </div>
+
+            <div class="course-category">
+              <div class="course-category-label">Computer Science</div>
+              <div class="course-pills">
+                <span class="course-pill">Introduction to Python</span>
+                <span class="course-pill">Object-Oriented Programming I with Java</span>
+                <span class="course-pill">Object-Oriented Programming II with Java</span>
+              </div>
+            </div>
+
+            <div class="course-category">
+              <div class="course-category-label">Other</div>
+              <div class="course-pills">
+                <span class="course-pill">Technical Writing</span>
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
     </div>
@@ -1153,6 +1305,13 @@ mobileMenu.querySelectorAll('a').forEach(link => {
     mobileMenu.classList.remove('open');
   });
 });
+
+function toggleCourses(btn) {
+  btn.classList.toggle('open');
+  const list = btn.nextElementSibling;
+  list.classList.toggle('open');
+  playClick();
+}
 </script>
 </body>
 </html>
